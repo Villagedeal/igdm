@@ -14,8 +14,8 @@ if (process.platform != 'win32') {
   require('./timeout-shim').fix();
 }
 
-const RATE_LIMIT_DELAY = 60000;
-let pollingInterval = 10000;
+const RATE_LIMIT_DELAY = 10000;
+let pollingInterval = 1000;
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -32,7 +32,7 @@ function createWindow () {
       minHeight: 400
     })
   }
-  mainWindow.setTitle('IG:dm - Instagram Desktop Messenger')
+  mainWindow.setTitle('Insta:DM')
 
   instagram.checkAuth(session).then((result) => {
     let view = result.isLoggedIn ? '../browser/index.html' : '../browser/login.html'
