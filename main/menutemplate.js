@@ -27,7 +27,7 @@ const template = [{
         ]
     },
     {
-        label: 'DM+',
+        label: 'DM',
         submenu: [
             { role: 'changerefreshrate' }
         ]

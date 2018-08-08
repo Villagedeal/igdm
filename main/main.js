@@ -14,7 +14,7 @@ if (process.platform != 'win32') {
     require('./timeout-shim').fix();
 }
 
-const RATE_LIMIT_DELAY = 10000;
+const RATE_LIMIT_DELAY = 60000;
 let pollingInterval = 1000;
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -103,11 +103,11 @@ app.on('activate', () => {
 
 // reduce polling frequency when app is not active.
 app.on('browser-window-blur', () => {
-    pollingInterval = 30000;
+    pollingInterval = 3000;
 })
 
 app.on('browser-window-focus', () => {
-    pollingInterval = 10000;
+    pollingInterval = 1000;
     app.setBadgeCount(0);
 })
 
