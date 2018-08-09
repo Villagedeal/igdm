@@ -1,4 +1,4 @@
-# IG:dm Messenger
+# IG:DM Messenger
 Multi-platform Desktop application for INSTAGRAM DMs, built with electron
 ![Build Status!](https://travis-ci.org/ifedapoolarewaju/igdm.svg?branch=master)
 
