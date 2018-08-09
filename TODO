@@ -1,3 +1,5 @@
 1 : Add deleteMessage feature (I need more reaserch & help with insta-priv-api.v1, custom packets maybe?)
 2 : Fix unable to resize chat list bar (for bigger screens this is quite annoying)
 3 : remove menuItem(DM+) from showing up in rateWindow
+4 : being able to use multiple accounts
+5 : dictionary checking
