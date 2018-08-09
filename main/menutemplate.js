@@ -1,5 +1,6 @@
 const app = require('electron').app
 const { openExternal } = require('electron').shell
+const main = require('./main');
 
 const template = [{
         label: 'Edit',
@@ -27,10 +28,13 @@ const template = [{
         ]
     },
     {
-        label: 'DM',
-        submenu: [
-            { role: 'changerefreshrate' }
-        ]
+        label: 'DM+',
+        submenu: [{
+            label: 'Change Refresh Rate',
+            click() {
+                main.openRateWindow();
+            }
+        }]
     },
     {
         role: 'window',

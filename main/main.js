@@ -16,11 +16,15 @@ if (process.platform != 'win32') {
 
 const RATE_LIMIT_DELAY = 60000;
 let pollingInterval = 1000;
+let windowblurpolling = 3000;
+let windowfocuspolling = 1000;
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
 let session
+
+let rateWindow = null;
 
 function createWindow() {
     if (!mainWindow) {
@@ -46,6 +50,34 @@ function createWindow() {
     })
 
     mainWindow.on('closed', () => mainWindow = null)
+}
+
+
+
+function createRefreshRateWindow() {
+    if (rateWindow == null) {
+        rateWindow = new BrowserWindow({
+            width: 500,
+            height: 430,
+            icon: `${__dirname}/../browser/img/icon.png`,
+            minWidth: 500,
+            minHeight: 430
+        })
+        rateWindow.setResizable(false)
+        rateWindow.setTitle('IG:DM+ - Change Message Refresh Rate')
+        rateWindow.loadURL(url.format({
+            pathname: path.join(__dirname, '../browser/messagerate.html'),
+            protocol: 'file:',
+            slashes: true
+        }))
+        updateValues();
+        rateWindow.on('closed', () => rateWindow = null)
+        mainWindow.on('closed', () => {
+            if (!(rateWindow == null)) {
+                rateWindow.close();
+            }
+        })
+    }
 }
 
 function getChatList() {
@@ -82,6 +114,8 @@ app.on('ready', () => {
     createWindow();
     // only set the menu template when in production mode/
     // this also leaves the dev console enabled when in dev mode.
+    const menu = Menu.buildFromTemplate(menuTemplate);
+    Menu.setApplicationMenu(menu);
     if (!process.defaultApp) {
         const menu = Menu.buildFromTemplate(menuTemplate);
         Menu.setApplicationMenu(menu);
@@ -103,11 +137,11 @@ app.on('activate', () => {
 
 // reduce polling frequency when app is not active.
 app.on('browser-window-blur', () => {
-    pollingInterval = 3000;
+    pollingInterval = windowblurpolling;
 })
 
 app.on('browser-window-focus', () => {
-    pollingInterval = 1000;
+    pollingInterval = windowfocuspolling;
     app.setBadgeCount(0);
 })
 
@@ -191,3 +225,23 @@ electron.ipcMain.on('getUnfollowers', (_) => {
 electron.ipcMain.on('unfollow', (_, userId) => {
     instagram.unfollow(session, userId)
 })
+
+
+function updateValues() {
+    if (!(rateWindow == null)) {
+        rateWindow.webContents.executeJavaScript(`document.querySelector('span.OI').innerHTML`, function(result) {
+            windowfocuspolling = result * 1000;
+        })
+        rateWindow.webContents.executeJavaScript(`document.querySelector('span.OO').innerHTML`, function(result) {
+            windowblurpolling = result * 1000;
+        })
+    }
+
+    setTimeout(function() {
+        updateValues();
+    }, 500)
+}; //milliseconds
+
+module.exports.openRateWindow = function() {
+    createRefreshRateWindow();
+}

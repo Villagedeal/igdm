@@ -12,6 +12,8 @@ const buildAndGetStoragePath = () => {
     return storagePath
 }
 
+
+
 const canUseFileStorage = () => {
     try {
         fs.accessSync(`${app.getPath('userData')}/`, fs.W_OK);
